@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Any, Dict, List
 
+from data.config import settings
 from database.requests import Order, User
 
 app = FastAPI()
@@ -36,6 +37,10 @@ class CreatingOrderItem(BaseModel):
 
 class DeletingOrderItem(BaseModel):
     id: int
+
+
+class NewPaymentItem(BaseModel):
+    amount: int
 
 
 @app.get("/user/{id}")
@@ -127,4 +132,12 @@ async def delete_order_route(item: DeletingOrderItem) -> Dict[str, Any]:
     return {
         "ok": False,
         "message": "Order does not exist or already deleted"
+    }
+
+
+@app.post("/new_payment")
+async def new_payment_route(item: NewPaymentItem) -> Dict[str, Any]:
+    return {
+        "amount": item.amount,
+        "transfer_credentials": settings["transferCredentials"]
     }
