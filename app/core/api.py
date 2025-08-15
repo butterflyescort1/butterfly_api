@@ -110,7 +110,7 @@ async def create_order_route(item: CreatingOrderItem) -> Dict[str, Any]:
         service_name=service_names[item.service_name],
         addservice_name=item.addservice_name or "Нет",
         amount=item.amount,
-        status="Ожидается оплата🌀"
+        status="new"
     )
     return {"ok": True}
 

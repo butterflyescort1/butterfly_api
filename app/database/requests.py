@@ -62,6 +62,7 @@ class Order:
             return order
         return {}
     
+    @classmethod
     async def get_user_orders(self, user_id: int) -> List[Dict[str, Any]]:
         orders = await OrderTable.filter(status="new", mammoth_id=user_id).values()
         new_orders = []
