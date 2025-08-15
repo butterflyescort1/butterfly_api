@@ -1,6 +1,6 @@
 from typing import Any, List, Dict, Optional
 
-from .models import OrderTable, UserTable
+from .models import FileTable, OrderTable, UserTable
 
 
 class User:
@@ -74,3 +74,23 @@ class Order:
     
     async def delete(self) -> None:
         await OrderTable.filter(id=self.id).update(status="cancelled")
+
+
+class File:
+    def __init__(self, id: str):
+        self.id = id
+    
+    async def file_exists(self) -> bool:
+        return await FileTable.filter(id=self.id).exists()
+    
+    async def create_file(self, file_id: str):
+        await FileTable.create(
+            id=self.id,
+            file_id=file_id
+        )
+    
+    async def get_file_id(self) -> str:
+        return (await FileTable.get(id=self.id)).file_id
+    
+    async def delete_file(self) -> str:
+        await FileTable.filter(id=self.id).delete()

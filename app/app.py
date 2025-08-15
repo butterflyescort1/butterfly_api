@@ -1,22 +1,26 @@
 import asyncio
-import signal
-import uvicorn
 
 from tortoise import Tortoise
 
-from core.api import app
 from data.config import DATABASE_CONFIG
+from handlers import start_handler
+from loader import bot, dp, server
 
 
 async def main() -> None:
-    signal.signal(signal.SIGINT, lambda *_: ...)
-
     await Tortoise.init(DATABASE_CONFIG)
     await Tortoise.generate_schemas()
 
-    config = uvicorn.Config(app, host="0.0.0.0", port=8000)
-    server = uvicorn.Server(config)
-    await server.serve()
+    dp.include_router(start_handler.router)
+
+    await bot.delete_webhook(drop_pending_updates=True)
+
+    tasks = [
+        asyncio.create_task(dp.start_polling(bot)),
+        asyncio.create_task(server.serve())
+    ]
+
+    await asyncio.gather(*tasks)
 
     await Tortoise.close_connections()
 
