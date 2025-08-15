@@ -1,10 +1,18 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Any, Dict
 
 from database.requests import User
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://butterflyescort1.github.io"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True
+)
 
 
 class CreatingUserItem(BaseModel):
