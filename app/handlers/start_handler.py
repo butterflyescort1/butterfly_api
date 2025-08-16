@@ -59,8 +59,6 @@ async def get_start_command_handler(message: Message, state: FSMContext):
 async def get_city_text_message_handler(message: Message, state: FSMContext):
     await state.clear()
 
-    city = message.text.capitalize()
-
-    await User(message.from_user.id).create_user(city)
+    await User(message.from_user.id).create_user(message.text)
 
     await get_start_command_handler(message, state)
