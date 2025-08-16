@@ -37,7 +37,7 @@ async def get_start_command_handler(message: Message, state: FSMContext):
         video_path = root_path / VIDEO_PATH
         video = await get_file(video_path)
 
-        user_name = escape(" ".split(list(filter(lambda name: name is not None, message.from_user.first_name, message.from_user.last_name))))
+        user_name = escape(" ".split(list(filter(lambda name: name is not None, [message.from_user.first_name, message.from_user.last_name]))))
 
         sent_message = await message.answer_video(
             video=video,
