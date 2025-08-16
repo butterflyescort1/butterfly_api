@@ -1,0 +1,7 @@
+from html import escape
+
+first_name = "daneeke"
+last_name = None
+
+user_name = escape(" ".join(list(filter(lambda name: name, [first_name, last_name]))))
+print(user_name)
