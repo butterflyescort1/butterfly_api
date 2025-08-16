@@ -20,6 +20,9 @@ async def main() -> None:
         asyncio.create_task(server.serve())
     ]
 
+    bot_ = await bot.get_me()
+    print(f"[*] Telegram-Bot (@{bot_.username}) has been launched successfully!")
+
     await asyncio.gather(*tasks)
 
     await Tortoise.close_connections()

@@ -4,6 +4,7 @@ from aiogram.filters.command import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from data.config import root_path, VIDEO_PATH
+from html import escape
 from typing import Optional
 
 from data.config import messages, settings
@@ -36,9 +37,11 @@ async def get_start_command_handler(message: Message, state: FSMContext):
         video_path = root_path / VIDEO_PATH
         video = await get_file(video_path)
 
+        user_name = escape(" ".split(list(filter(lambda name: name is not None, message.from_user.first_name, message.from_user.last_name))))
+
         sent_message = await message.answer_video(
             video=video,
-            caption=messages["startMessage"],
+            caption=messages["startMessage"].format(name=user_name),
             reply_markup=StartKeyboard(settings["butterflyURL"], user_id).get_start_keyboard()
         )
         await upload_file(video_path, sent_message.video.file_id)
